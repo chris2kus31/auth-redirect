@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication Redirect</title>
+    <script>
+        // Parse query parameters from the URL
+        function getQueryParams() {
+            const params = {};
+            const queryString = window.location.search.substring(1);
+            const queryArray = queryString.split('&');
+            queryArray.forEach((item) => {
+                const [key, value] = item.split('=');
+                params[decodeURIComponent(key)] = decodeURIComponent(value);
+            });
+            return params;
+        }
+
+        // Redirect to the mobile app with the tokens
+        window.onload = function() {
+            const params = getQueryParams();
+            const accessToken = params['access_token'];
+            const refreshToken = params['refresh_token'];
+
+            if (accessToken && refreshToken) {
+                // Redirect to the custom URI scheme of your app
+                window.location.href = `myapp://auth/callback?access_token=${accessToken}&refresh_token=${refreshToken}`;
+            } else {
+                document.body.innerHTML = '<h2>Authentication Failed</h2><p>Required tokens not found.</p>';
+            }
+        };
+    </script>
+</head>
+<body>
+    <h1>Redirecting...</h1>
+    <p>If you are not redirected automatically, <a id="redirectLink" href="#">click here</a>.</p>
+</body>
+</html>

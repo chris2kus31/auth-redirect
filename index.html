@@ -17,17 +17,21 @@
             return params;
         }
 
-        // Redirect to the mobile app with the tokens
+        // Redirect to the mobile app with the tokens and user information
         window.onload = function() {
             const params = getQueryParams();
             const accessToken = params['access_token'];
             const refreshToken = params['refresh_token'];
+            const email = params['email'];
+            const firstName = params['first_name'];
+            const lastName = params['last_name'];
+            const profilePic = params['profile_pic'];
 
-            if (accessToken && refreshToken) {
-                // Redirect to the custom URI scheme of your app
-                window.location.href = `myapp://auth/callback?access_token=${accessToken}&refresh_token=${refreshToken}`;
+            if (accessToken && refreshToken && email && firstName && lastName && profilePic) {
+                // Construct the deep link with all parameters
+                window.location.href = `myapp://auth/callback?access_token=${accessToken}&refresh_token=${refreshToken}&email=${encodeURIComponent(email)}&first_name=${encodeURIComponent(firstName)}&last_name=${encodeURIComponent(lastName)}&profile_pic=${encodeURIComponent(profilePic)}`;
             } else {
-                document.body.innerHTML = '<h2>Authentication Failed</h2><p>Required tokens not found.</p>';
+                document.body.innerHTML = '<h2>Authentication Failed</h2><p>Required data not found.</p>';
             }
         };
     </script>
